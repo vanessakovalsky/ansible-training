@@ -25,19 +25,19 @@ docker container ls
 ## Créer et deployer la clé ssh
 - Toutes les commandes se font depuis la machine de gestion (celle ou ansible est installé)
 ```
-docker exec –t <containerID> bash
+docker exec –i -t <containerID> bash
 ```
 - On génère la clé :
 ```
 ssh-keygen
 ```
-- On copie la clé sur les 3 machines hôtes :
+- On copie la clé sur les 3 machines hôtes (il faut rentrer le password root (toor dans les commandes du compose):
 ```
 ssh-copy-id root@<IPmachinehost> 
 ssh-copy-id root@<IPmachinehost2> 
 ssh-copy-id root@<IPmachinehost3>
 ```
-- On teste la connexion pour chaque machine : 
+- On teste la connexion pour chaque machine, saisir la passphrase que vous avez saisie lors de la génération de la clé ssh : 
 ```
 ssh root@<IPmachinehost> 
 ssh root@<IPmachinehost2> 

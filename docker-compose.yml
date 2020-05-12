@@ -1,9 +1,15 @@
 version: "3.7"
 services:
   master:
-    image: ansible/ansible:default
+    image: alpine:latest
     container_name: master01
     hostname: master01
+    stdin_open: true
+    tty: true
+    command : >
+      /bin/sh -c "apk update 
+      &&  apk add ansible openssh-server openssh
+      && /bin/sh"
     volumes:
       - ansible_vol:/var/ans
   host:
@@ -14,6 +20,18 @@ services:
     hostname: host01
     stdin_open: true
     tty: true
+    command : >
+      /bin/sh -c "apt update 
+      && apt upgrade -y 
+      &&  DEBIAN_FRONTEND=noninteractive 
+      &&  apt install -y apt --no-install-recommends openssh-server python 
+      &&  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+      &&  sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config      
+      &&  echo 'root:toor' | chpasswd 
+      &&  mkdir /run/sshd
+      && /usr/sbin/sshd -D"
+    expose: 
+      - 22
     volumes:
      - ansible_vol:/var/ans
   host02:
@@ -24,6 +42,17 @@ services:
     hostname: host02
     stdin_open: true
     tty: true
+    command: >
+      /bin/sh -c "yum update -y 
+      &&  yum install -y openssh-server python 
+      &&  yum clean all 
+      &&  sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config 
+      &&  echo 'root:toor' | chpasswd 
+      &&  mkdir /run/sshd 
+      &&  ssh-keygen -A
+      && /usr/sbin/sshd -D"
+    expose: 
+      - 22
     volumes:
      - ansible_vol:/var/ans
   host03:
@@ -34,6 +63,17 @@ services:
     hostname: host03
     stdin_open: true
     tty: true
+    command : >
+      bash -c "apt update && apt upgrade -y 
+      &&  DEBIAN_FRONTEND=noninteractive 
+      &&  apt install -y apt --no-install-recommends openssh-server python 
+      &&  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+      &&  sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+      &&  echo 'root:toor' | chpasswd 
+      &&  mkdir /run/sshd 
+      && /usr/sbin/sshd -D"
+    expose: 
+      - 22
     volumes:
      - ansible_vol:/var/ans
 volumes:
