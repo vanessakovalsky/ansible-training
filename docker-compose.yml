@@ -12,6 +12,8 @@ services:
     image: debian
     container_name: host01
     hostname: host01
+    stdin_open: true
+    tty: true
     volumes:
      - ansible_vol:/var/ans
   host02:
@@ -20,6 +22,8 @@ services:
     image: centos:7
     container_name: host02
     hostname: host02
+    stdin_open: true
+    tty: true
     volumes:
      - ansible_vol:/var/ans
   host03:
@@ -28,6 +32,8 @@ services:
     image: ubuntu
     container_name: host03
     hostname: host03
+    stdin_open: true
+    tty: true
     volumes:
      - ansible_vol:/var/ans
 volumes:
