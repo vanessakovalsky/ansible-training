@@ -10,7 +10,7 @@ Ce premier TP va nous permettre d'avoir un environnement fonctionnel pour appren
 ## Lancement de notre environnement
 - Se mettre dans le dossier du premier TP :
 ```
-cd ansible-training/tp/tp1
+cd ansible-training/tp/
 ```
 - Lancer le compose 
 ```
