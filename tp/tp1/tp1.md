@@ -25,7 +25,7 @@ docker container ls
 ## Créer et deployer la clé ssh
 - Toutes les commandes se font depuis la machine de gestion (celle ou ansible est installé)
 ```
-docker exec –i -t <containerID> bash
+docker exec –i -t <containerID> 'sh'
 ```
 - On génère la clé :
 ```
