@@ -132,9 +132,16 @@ tasks:
     apt:
       name: 
         - mysql-server
-        - python-mysqldb # for mysql_db and mysql_user modules
+        - python3-pip
+        - python3-setuptools
+        - python3-pymysql      
       state: present
       update_cache: yes  
+```
+- On installe un paquet python nécessaire au bon fonctionnement des modules mysql pour ansible :
+```
+  - name: Install the Python MySQLB module
+    pip: name=mysql-connector
 ```
 - Créer la configuration du client mysql:
 ```
@@ -149,14 +156,7 @@ name: Create MySQL client config
 ```
 - Autoriser les connexions à mysql :
 ```
-name: Allow external MySQL connexions (1/2)
-    lineinfile:
-      path: /etc/mysql/mysql.conf.d/mysqld.cnf
-      regexp: '^skip-external-locking'
-      line: "# skip-external-locking"
-    notify: Restart mysql
-
-  - name: Allow external MySQL connexions (2/2)
+  - name: Allow external MySQL connexions 
     lineinfile:
       path: /etc/mysql/mysql.conf.d/mysqld.cnf
       regexp: '^bind-address'
@@ -165,6 +165,24 @@ name: Allow external MySQL connexions (1/2)
 ```
 - Charger la table sql (remplacer les variables par les bonnes valeurs en dur dans le fichier table.sql)
 ```
+  - name: upload sql table config
+    copy:
+      src: "files/table.sql"
+      dest: "/tmp/table.sql"
+```
+- On initialise le home de mysql et on démarre le service (via shell car service ne fonctionne pas sur docker pour démarrer mysql)
+```
+  - name : moving mysql home
+    user:
+      name: mysql
+      home: /var/lib/mysql
+
+  - name: start mysql
+    shell:
+      service mysql start
+```
+- On importe la base de données :
+```
   - name: add sql table to database
     mysql_db:
       name: "{{ mysql_dbname }}"
@@ -172,7 +190,7 @@ name: Allow external MySQL connexions (1/2)
       login_user: root
       login_password: '{{ root_password }}'
       state: import 
-      target: files/table.sql
+      target: /tmp/table.sql
 ```
 - Créer un utilisateur mysql :
 ```
@@ -180,7 +198,7 @@ name: Allow external MySQL connexions (1/2)
     mysql_user:
       name: "{{ mysql_user }}"
       password: "{{ mysql_password }}"
-      priv: "{{ mysql_dbname }}.*:ALL"
+      priv: "*.*:ALL"
       state: present
       login_user: root
       login_password: '{{ root_password }}'
