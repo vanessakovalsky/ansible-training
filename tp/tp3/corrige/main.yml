@@ -1,0 +1,6 @@
+mysql_user: "root"
+mysql_password: "mypassword"
+mysql_dbname: "db_demo"
+db_host: "localhost"
+webserver_host: "192.168.0.21"
+root_password: "mypassword"

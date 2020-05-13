@@ -1,0 +1,14 @@
+- name: Mon premier playbook
+  hosts: host02
+  variable: 
+    mavariable: toto
+  tasks: 
+    - name: update all packages ..
+      yum:
+        name: '*'
+        state: latest
+    - name: tache 2 "{{ mavariable }}"
+      shell: sleep 2 && shutdown -r now 'Ansible reboot triggered'
+- name: deuxième play :
+    hosts: testeservers
+

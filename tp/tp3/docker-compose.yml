@@ -1,0 +1,63 @@
+version: "3.7"
+services:
+  master:
+    image: alpine:latest
+    container_name: master01
+    hostname: master01
+    stdin_open: true
+    tty: true
+    command : >
+      /bin/sh -c "apk update 
+      &&  apk add ansible openssh-server openssh
+      && /bin/sh"
+    volumes:
+      - ansible_vol:/var/ans
+      - ./files/:/files/
+  webserver:
+    links:
+      - master
+    image: ubuntu
+    container_name: webserver
+    hostname: webserver
+    stdin_open: true
+    tty: true
+    command : >
+      bash -c "apt update && apt upgrade -y 
+      &&  DEBIAN_FRONTEND=noninteractive 
+      &&  apt install -y apt --no-install-recommends python3 openssh-server sudo
+      &&  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+      &&  sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+      &&  echo 'root:toor' | chpasswd 
+      &&  mkdir /run/sshd 
+      && /usr/sbin/sshd -D"
+    expose: 
+      - 22
+    ports:
+      - 8042:80
+    volumes:
+     - ansible_vol:/var/ans
+  dbserver:
+    links:
+      - master
+    image: ubuntu
+    container_name: dbserver
+    hostname: dbserver
+    stdin_open: true
+    tty: true
+    command : >
+      bash -c "apt update && apt upgrade -y 
+      &&  DEBIAN_FRONTEND=noninteractive 
+      &&  apt install -y apt --no-install-recommends python3 openssh-server sudo 
+      &&  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+      &&  sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+      &&  echo 'root:toor' | chpasswd 
+      &&  mkdir /run/sshd 
+      && /usr/sbin/sshd -D"
+    expose: 
+      - 22
+    ports:
+      - 3306:3306
+    volumes:
+     - ansible_vol:/var/ans
+volumes:
+  ansible_vol:

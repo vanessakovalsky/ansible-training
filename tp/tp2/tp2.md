@@ -44,9 +44,9 @@ ansible testservers -m user -a "name=core groups=rennes"
 - Comme il s'agit de deux versions différentes de linux, on va nommer les hosts, modifier le fichier /etc/ansible/hosts : 
 ```
 [testservers] 
-host01 ansible_hosts=<IPmachinehost>
-host02 ansible_hosts=<IPmachinehost2>
-host03 ansible_hosts=<IPmachinehost3>
+host01 ansible_host=<IPmachinehost>
+host02 ansible_host=<IPmachinehost2>
+host03 ansible_host=<IPmachinehost3>
 ```
 - Pour le serveur centos (host02) on utilise yum 
 ```
@@ -68,11 +68,11 @@ host03 ansible_hosts=<IPmachinehost3>
 ## Désactiver les services :
 - On stoppe le service crond :
 ```
-ansible testservers -m systemd -a "name=crond state=stopped"
+ansible testservers -m service -a "name=crond state=stopped"
 ```
 - On désactive le service auditd
 ```
-ansible testservers -m systemd -a "name=auditd enabled=no"
+ansible testservers -m service -a "name=auditd enabled=no"
 ```
 
 ## Mise à jour du système 
@@ -85,7 +85,7 @@ ansible testservers -m systemd -a "name=auditd enabled=no"
 ## Rédémarrer la machine hôte
 - On redémarre les machines hôtes :
 ```
-ansible testservers -m shell -a "reboot"
+ansible testservers -m shell -a "name=reboot"
 ```
 
 -> Vous savez maintenant manipulez les principaux modules de ansible, n'hésitez pas à aller en découvrir d'autres sur :
