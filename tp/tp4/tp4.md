@@ -10,14 +10,18 @@ Nous allons donc
 - Reprenez le playbook du tp précédent (ou celui fournit dans le dossier corriger)
 - Nous allons travailler avec ce rôles :
 https://galaxy.ansible.com/geerlingguy/mysql
-- Suivre les instructions données pour l'installation et la définition des variables
+* Installer le rôle
+```
+ansible-galaxy install vanessakovalsky.mysql
+```
+- Suivre les instructions données la définition des variables
 - Ajouter au playbook le rôle installé et supprimer (ou commenter) toutes les taches du play DBSERVER, sauf celles concernant l'import du fichier table.sql
 ```
 - hosts: dbserver
   vars_files:
     - vars/main.yml
   roles:
-    - { role: geerlingguy.mysql }
+    - { role: vanessakovalsky.mysql }
 ```
 - Tester en relançant le playbook pour vérifier si cela fonctionne toujours
 

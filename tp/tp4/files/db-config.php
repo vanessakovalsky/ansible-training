@@ -1,9 +1,7 @@
 <?php
 const DB_DSN = 'mysql:host=dbserver;dbname=db_demo';
-const DB_USER = "root";
-const DB_PASS = "mypassword";
-
-
+const DB_USER = "dbdemo";
+const DB_PASS = "dbpass";
 
 $options = array(
     PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", // encodage utf-8

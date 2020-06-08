@@ -10,13 +10,13 @@ Ce premier TP va nous permettre d'avoir un environnement fonctionnel pour appren
 ## Lancement de notre environnement
 - Se mettre dans le dossier du premier TP :
 ```
-cd ansible-training/tp/
+cd ansible-training/tp/tp1
 ```
 - Lancer le compose 
 ```
 docker-compose up -d
 ```
-- Lest 4 conteneurs (un avec ansible et 3 hôtes) sont lancer, vérifier le avec : 
+- Les 4 conteneurs (un avec ansible et 3 hôtes) sont lancer, vérifier le avec : 
 ```
 docker container ls
 ```
