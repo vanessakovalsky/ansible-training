@@ -1,0 +1,32 @@
+- name: Give writable mode to http folder
+  file:
+    path: /var/www/html
+    state: directory
+    mode: '0755'
+  tags:
+    - deploiement
+    - web
+
+- name: remove default index.html
+  file:
+    path: /var/www/html/index.html
+    state: absent
+  tags:
+    - deploiement
+    - web
+
+- name: upload web app source
+  copy:
+    src: '{{ app_directory }}'
+    dest: /var/www/html/
+  tags:
+    - deploiement
+    - web
+
+- name: deploy php database config
+  template:
+    src: '{{ db_config }}'
+    dest: "/var/www/html/db-config.php"
+  tags:
+    - deploiement
+    - web

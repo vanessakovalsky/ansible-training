@@ -7,7 +7,7 @@ Pour cela :
 
 ## Variabiliser l'ensemble des fichiers :
 - Remplacer le fichier table.sql dans file par un fichier table.sql.j2 pour le transformer en template
-- A l'intérieur de se ficheir remplacer le nom de la base (db_demo) par uen variable que vous devez déclarer dans le fichier de variables
+- A l'intérieur de se fichier remplacer le nom de la base (db_demo) par une variable que vous devez déclarer dans le fichier de variables
 - Remplacer la tache : upload sql table config (côté dbserver) par :
 ```
   - name: upload sql table config
@@ -17,14 +17,15 @@ Pour cela :
 ```
 - Cela permet d'obtenir le fichier sql charger à partir du template + des variables définies
 - Même chose pour le fichier db-config.php à renommer en db-config.php.j2
-- Remplacer la tâche (côté webserver) deploy php database config par la tache suivante :
+- Remplacer la tâche (côté rôle webserver) deploy php database config par la tache suivante :
 ```
   - name: deploy php database config
     template:
-      src: "db-config.php.j2"
+      src: '{{ db_config }}'
       dest: "/var/www/html/db-config.php"
 ```
-- Sur l'ensemble de nos tâches remplacer les valeurs par des variables et déclarer ses variables dans le vars/main.yml
+* N'oublier pas de modifier la variable db_config en conséquence
+* Sur l'ensemble de nos tâches remplacer les valeurs par des variables et déclarer ses variables dans le vars/main.yml
 
 ## Rendre adaptable à l'environnement nos tâches :
 - Nous allons utiliser les facts pour savoir dans quel type d'environnement système nous somme, pour connaitre les facts disponible :

@@ -1,0 +1,36 @@
+#Paquets à installer :
+mysql_python_package_debian:
+  - python3-dev
+  - libmysqlclient-dev
+  - python3-pip 
+  - python3-setuptools
+  - python3-pymysql
+
+mysql_dbname: db_demo
+
+mysql_root_home: /root
+mysql_root_username: root
+mysql_root_password: root
+mysql_root_password_update: yes
+
+mysql_users:
+  - name: dbdemo
+    host: "%"
+    password: dbpass
+    priv: "db_demo.*:ALL"
+
+db_host: dbserver
+webserver_host: webserver
+root_password: root
+
+db_config: /files/db-config.php.j2
+
+extra_packages_debian: 
+  - apache2
+  - php
+  - php-mysql
+
+extra_packages_redhat: 
+  - httpd
+  - php
+  - php-mysqlnd

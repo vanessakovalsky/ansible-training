@@ -1,0 +1,13 @@
+- name: install apache and php last version for Debian os family
+  apt:
+    name: '{{ extra_packages_debian }}'
+    state: present
+    update_cache: yes
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: install apache and php last version for RedHat os family
+  yum:
+    name: '{{ extra_packages_redhat }}'
+    state: present
+    update_cache: yes
+  when: ansible_facts['os_family'] == "RedHat"

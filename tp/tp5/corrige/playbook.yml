@@ -1,0 +1,55 @@
+---
+# WEB SERVER
+
+- hosts: webserver
+  vars_files: vars/main.yml
+  name: installation du rôle webserver
+  roles:
+    - { role: vanessakovalsky.ansible_role_webserver }
+  become: yes
+
+# DATABASE SERVER - Role install
+- hosts: dbserver
+  vars_files:
+    - vars/main.yml
+  name: installation du rôle mysql
+  roles:
+    - { role: vanessakovalsky.mysql }
+  become: yes
+  tasks: 
+  - name: upload sql table config
+    template:
+      src: "table.sql.j2"
+      dest: "/tmp/table.sql"
+    tags:
+      - deploiement
+      - db
+
+  - name: Allow external MySQL connexions 
+    lineinfile:
+      path: /etc/mysql/mysql.conf.d/mysqld.cnf
+      regexp: '^bind-address'
+      line: "# bind-address"
+    tags:
+      - config
+      - db
+
+  - name : moving mysql home
+    user:
+      name: mysql
+      home: /var/lib/mysql
+    tags:
+      - deploiement
+      - db
+  - name: add sql table to database
+    mysql_db:
+      name: '{{ mysql_dbname }}'
+      state: present
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      login_user: '{{ mysql_root_username }}'
+      login_password: '{{ mysql_root_password }}'
+      state: import 
+      target: /tmp/table.sql
+    tags:
+      - deploiement
+      - db
