@@ -65,6 +65,7 @@ services:
     command : >
       bash -c "apt update && apt upgrade -y 
       &&  DEBIAN_FRONTEND=noninteractive 
+      &&  mkdir -p /run/sshd
       &&  apt install -y apt --no-install-recommends openssh-server  
       &&  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
       &&  sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
