@@ -24,11 +24,11 @@ services:
     command : >
       bash -c "apt update && apt upgrade -y 
       &&  DEBIAN_FRONTEND=noninteractive 
+      &&  mkdir /run/sshd 
       &&  apt install -y apt --no-install-recommends python3 openssh-server sudo
       &&  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
       &&  sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
       &&  echo 'root:toor' | chpasswd 
-      &&  mkdir /run/sshd 
       && /usr/sbin/sshd -D"
     expose: 
       - 22
@@ -47,11 +47,11 @@ services:
     command : >
       bash -c "apt update && apt upgrade -y 
       &&  DEBIAN_FRONTEND=noninteractive 
+      &&  mkdir /run/sshd 
       &&  apt install -y apt --no-install-recommends python3 openssh-server sudo 
       &&  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
       &&  sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
       &&  echo 'root:toor' | chpasswd 
-      &&  mkdir /run/sshd 
       && /usr/sbin/sshd -D"
     expose: 
       - 22
