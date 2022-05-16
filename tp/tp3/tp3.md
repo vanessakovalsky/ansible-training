@@ -203,7 +203,7 @@ name: Create MySQL client config
       login_user: root
       login_password: '{{ root_password }}'
       login_unix_socket: /var/run/mysqld/mysqld.sock
-
+```
 -> Le deploiement de notre serveur de base de données est prêt
 
 ## Lancer notre playbook
