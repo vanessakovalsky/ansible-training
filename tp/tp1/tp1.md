@@ -31,6 +31,11 @@ docker exec -i -t <containerID> 'sh'
 ```
 ssh-keygen
 ```
+- on ajoute la clé à la machine
+```
+ eval "$(ssh-agent -s)"
+ ssh-add /root/.ssh/id_rsa
+```
 - On copie la clé sur les 3 machines hôtes (il faut rentrer le password root (toor dans les commandes du compose):
 ```
 ssh-copy-id root@<IPmachinehost> 
