@@ -1,6 +1,6 @@
 <?php
 const DB_DSN = 'mysql:host=dbserver;dbname=db_demo';
-const DB_USER = "root";
+const DB_USER = "user";
 const DB_PASS = "mypassword";
 
 
