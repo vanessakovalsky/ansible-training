@@ -2,7 +2,8 @@
 # WEB SERVER
 
 - hosts: webserver
-  vars_files: vars/main.yml
+  vars_files: 
+  - vars/main.yml
 
   tasks:
   - name: install apache and php last version
@@ -45,7 +46,8 @@
 # DATABASE SERVER
 
 - hosts: dbserver
-  vars_files: vars/main.yml
+  vars_files: 
+  - vars/main.yml
 
   tasks:
   - name: install mysql
@@ -62,6 +64,9 @@
   - name: Install the Python MySQLB module
     pip: name=mysql-connector
 
+  - name: Ensure mysql service is running
+    shell: service mysql start
+
   - name: Create MySQL client config
     copy:
       dest: "/root/.my.cnf"
@@ -71,34 +76,59 @@
         password={{ root_password }}
       mode: 0400
 
+  - name: Ensure root user can only login from localhost
+    mysql_user:
+      name: user
+      host: localhost
+      password: "{{ mysql_password }}"
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+
+  - name: Remove anonymous users
+    command: |
+      mysql -p{{ root_password }} -ne "{{ item }}"
+    with_items:
+      - DELETE FROM mysql.user WHERE User=''
+    changed_when: False
+
+  - name: Disallow root login remotely
+    command: |
+      mysql -p{{ root_password }} -ne "{{ item }}"
+    with_items:
+      - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+    changed_when: False
+
+  - name: Remove test database and access to it
+    command: |
+      mysql -p{{ root_password }} -ne "{{ item }}"
+    with_items:
+      - DROP DATABASE IF EXISTS test
+      - DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'
+    changed_when: False
+
+  - name: Reload privilege tables
+    command: |
+      mysql -p{{ root_password }} -ne "{{ item }}"
+    with_items:
+      - FLUSH PRIVILEGES
+    changed_when: False
+
+  - name: Delete .my.conf
+    file:
+      path: /root/.my.cnf
+      state: absent
+
   - name: upload sql table config
     copy:
       src: "files/table.sql"
       dest: "/tmp/table.sql"
 
-  - name: Allow external MySQL connexions 
-    lineinfile:
-      path: /etc/mysql/mysql.conf.d/mysqld.cnf
-      regexp: '^bind-address'
-      line: "# bind-address"
-
-  - name : moving mysql home
-    user:
-      name: mysql
-      home: /var/lib/mysql
-
-  - name: start mysql
-    shell:
-      service mysql start
-
   - name: add sql table to database
     mysql_db:
       name: db_demo
-      state: present
+      state: import
       login_unix_socket: /var/run/mysqld/mysqld.sock
       login_user: root
       login_password: '{{ root_password }}'
-      state: import 
       target: /tmp/table.sql
 
   - name: "Create {{ mysql_user }} with all {{ mysql_dbname }} privileges"
@@ -106,7 +136,20 @@
       name: "{{ mysql_user }}"
       password: "{{ mysql_password }}"
       priv: "*.*:ALL"
+      append_privs: yes
+      host: "{{ webserver_host }}"
       state: present
       login_user: root
       login_password: '{{ root_password }}'
       login_unix_socket: /var/run/mysqld/mysqld.sock
+
+  - name: ensure mysql is configured to bind to the specified address and port
+    ini_file:
+      dest: /etc/mysql/my.cnf
+      section: mysqld
+      option: "bind-address"
+      value: "0.0.0.0"
+    register: my_cnf
+
+  - name: restart mysql after bind
+    shell: service mysql restart
