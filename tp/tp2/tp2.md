@@ -66,9 +66,17 @@ host03 ansible_host=<IPmachinehost3>
 - Comment assigner le groupe lille comme propriétaire (groupe) du fichier ?
 
 ## Désactiver les services :
-- On stoppe le service crond :
+- On vérifie si cron est bien installé
 ```
-ansible testservers -m service -a "name=crond state=stopped"
+ansible host01 -m apt -a "name=cron state=present"
+```
+- On stoppe le service cron :
+```
+ansible testservers -m service -a "name=cron state=stopped"
+```
+- On vérifie si auditd est bien installé 
+```
+ansible host01 -m apt -a "name=auditd state=present"
 ```
 - On désactive le service auditd
 ```
