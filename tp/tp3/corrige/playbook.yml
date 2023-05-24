@@ -5,7 +5,8 @@
   vars_files: 
   - vars/main.yml
 
-  tasks:
+  tasks:  
+  # Etape 1 - Instalation des applications  
   - name: install apache and php last version
     apt:
       name:
@@ -19,7 +20,7 @@
     file:
       path: /var/www/html
       state: directory
-      mode: '0755'
+      mode: '0755' # chmod -R 755 /var/www/html
 
   - name: remove default index.html
     file:
@@ -33,7 +34,7 @@
 
   - name: deploy php database config
     copy:
-      src: "files/db-config.php"
+      src: "/files/db-config.php"
       dest: "/var/www/html/db-config.php"
   
   - name: ensure apache service is start
@@ -119,7 +120,7 @@
 
   - name: upload sql table config
     copy:
-      src: "files/table.sql"
+      src: "/files/table.sql"
       dest: "/tmp/table.sql"
 
   - name: add sql table to database

@@ -1,0 +1,22 @@
+---
+- name: Install software and configure servers
+  hosts: testserver
+  tasks:
+    - name: Create groups # ansible testservers -m group -a "name=paris gid=1010" 
+      group:
+        name: "{{ item }}"
+      loop:
+        - paris
+        - lille
+        - toulouse
+        - rennes
+    - name: Install software with apt 
+      apt: 
+        name: tree
+        state: present
+      when: (ansible_os_family == 'Debian') or (ansible_os_family == 'Ubuntu')
+    - name: Install software with yum 
+      yum: 
+        name: tree
+        state: present
+      when: ansible_os_family == 'Centos'

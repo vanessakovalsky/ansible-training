@@ -12,9 +12,9 @@
 - hosts: dbserver
   vars_files:
     - vars/main.yml
-  name: installation du rôle mysql
+  name: installation du role mysql
   roles:
-    - { role: vanessakovalsky.mysql }
+    - { role: geerlingguy.mysql }
   become: yes
   tasks: 
   - name: upload sql table config
@@ -48,7 +48,6 @@
       login_unix_socket: /var/run/mysqld/mysqld.sock
       login_user: '{{ mysql_root_username }}'
       login_password: '{{ mysql_root_password }}'
-      state: import 
       target: /tmp/table.sql
     tags:
       - deploiement
