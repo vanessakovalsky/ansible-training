@@ -19,4 +19,4 @@
       yum: 
         name: tree
         state: present
-      when: ansible_os_family == 'Centos'
+      when: ansible_os_family == 'RedHat'
