@@ -57,20 +57,14 @@ services:
   host03:
     links:
       - master
-    image: ubuntu
+    image: takeyamajp/ubuntu-sshd
     container_name: host03
     hostname: host03
     stdin_open: true
     tty: true
-    command : >
-      bash -c "apt update && apt upgrade -y 
-      &&  DEBIAN_FRONTEND=noninteractive 
-      &&  mkdir -p /run/sshd
-      &&  apt install -y apt --no-install-recommends openssh-server python3-apt
-      &&  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-      &&  sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
-      &&  echo 'root:toor' | chpasswd 
-      && /usr/sbin/sshd -D"
+    environment:
+      ROOT_PASSWORD: toor
+    command : "/usr/sbin/sshd -D"
     expose: 
       - 22
     volumes:
