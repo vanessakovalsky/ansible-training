@@ -37,7 +37,7 @@ services:
   host02:
     links:
       - master
-    image: centos:7
+    image: almalinux:latest
     container_name: host02
     hostname: host02
     stdin_open: true
