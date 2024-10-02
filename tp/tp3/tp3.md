@@ -260,3 +260,5 @@ ansible-playbook playbook.yml --syntax-check
 ansible-playbook playbook.yml
 ```
 - Vérifier sur localhost:8042 si notre application web s'affiche et si l'on peut enregistrer un article (ce qui signifie que la connexion avec la BDD fonctionne)
+* Vous obtenez alors une application qui ressemble à celle-ci :
+![](img/resultat.png)
