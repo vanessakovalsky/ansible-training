@@ -13,6 +13,7 @@ Voici donc les différentes tâches que nous allons effectuer :
 - Côté serveur base de données :
 - - Installer les packages mysql
 - - Modifier le mot de passe root
+  - sécuriser l'installation et supprimer ce qui est inutile
 - - Autoriser notre serveur web à communiquer avec la base de données
 - - Configurer notre table mysql avec les bonnes colonnes et autorisations
 
@@ -154,6 +155,51 @@ name: Create MySQL client config
         password={{ root_password }}
       mode: 0400
 ```
+* On configure l'utilisteur root pour qu'il puisse se connecter depuis l'hôte 'localhost' et on supprime les bases et utilisateurs inutiles
+```
+- name: Ensure root user can only login from localhost
+    mysql_user:
+      name: user
+      host: localhost
+      password: "{{ mysql_password }}"
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+
+  - name: Remove anonymous users
+    command: |
+      mysql -p{{ root_password }} -ne "{{ item }}"
+    with_items:
+      - DELETE FROM mysql.user WHERE User=''
+    changed_when: False
+
+  - name: Disallow root login remotely
+    command: |
+      mysql -p{{ root_password }} -ne "{{ item }}"
+    with_items:
+      - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+    changed_when: False
+
+  - name: Remove test database and access to it
+    command: |
+      mysql -p{{ root_password }} -ne "{{ item }}"
+    with_items:
+      - DROP DATABASE IF EXISTS test
+      - DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'
+    changed_when: False
+
+  - name: Reload privilege tables
+    command: |
+      mysql -p{{ root_password }} -ne "{{ item }}"
+    with_items:
+      - FLUSH PRIVILEGES
+    changed_when: False
+
+  - name: Delete .my.conf
+    file:
+      path: /root/.my.cnf
+      state: absent
+
+```
+
 - Autoriser les connexions à mysql :
 ```
   - name: Allow external MySQL connexions 
