@@ -25,6 +25,34 @@ ansible-galaxy install geerlingguy.mysql
     - { role: geerlingguy.mysql }
   #become: yes
 ```
+* Penser à définir les paramètres suivants dans le fichier vars/main.yml pour le rôle
+
+```
+mysql_python_package_debian:
+  - python3-dev
+  - libmysqlclient-dev
+  - python3-pip 
+  - python3-setuptools
+  - python3-pymysql
+
+mysql_dbname: db_demo
+
+mysql_root_home: /root
+mysql_root_username: root
+mysql_root_password: rootpassword
+mysql_root_password_update: yes
+mysql_databases:
+  - name: example_db
+    encoding: latin1
+    collation: latin1_general_ci
+mysql_users:
+  - name: example_user
+    host: "%"
+    password: similarly-secure-password
+    priv: "example_db.*:ALL"
+```
+
+
 - Tester en relançant le playbook pour vérifier si cela fonctionne toujours
 
 ## Ajouter des tags à nos taches
