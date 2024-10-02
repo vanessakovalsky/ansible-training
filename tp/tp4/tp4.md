@@ -23,7 +23,7 @@ ansible-galaxy install geerlingguy.mysql
   name: installation du role mysql
   roles:
     - { role: geerlingguy.mysql }
-  become: yes
+  #become: yes
 ```
 - Tester en relançant le playbook pour vérifier si cela fonctionne toujours
 
