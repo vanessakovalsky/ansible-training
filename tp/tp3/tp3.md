@@ -186,7 +186,6 @@ name: Create MySQL client config
   - name: add sql table to database
     mysql_db:
       name: "{{ mysql_dbname }}"
-      state: present
       login_user: root
       login_password: '{{ root_password }}'
       state: import 
