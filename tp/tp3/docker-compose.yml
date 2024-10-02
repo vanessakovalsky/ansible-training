@@ -1,4 +1,4 @@
-version: "3.7"
+name: appli-web
 services:
   master:
     image: alpine:latest
@@ -16,20 +16,14 @@ services:
   webserver:
     links:
       - master
-    image: ubuntu
+    image: takeyamajp/ubuntu-sshd
     container_name: webserver
     hostname: webserver
     stdin_open: true
     tty: true
-    command : >
-      bash -c "apt update && apt upgrade -y 
-      &&  DEBIAN_FRONTEND=noninteractive 
-      &&  mkdir /run/sshd 
-      &&  apt install -y apt --no-install-recommends python3 openssh-server sudo
-      &&  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-      &&  sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
-      &&  echo 'root:toor' | chpasswd 
-      && /usr/sbin/sshd -D"
+    environment:
+      ROOT_PASSWORD: toor
+    command : "/usr/sbin/sshd -D"
     expose: 
       - 22
     ports:
@@ -39,20 +33,14 @@ services:
   dbserver:
     links:
       - master
-    image: ubuntu
+    image: takeyamajp/ubuntu-sshd
     container_name: dbserver
     hostname: dbserver
     stdin_open: true
     tty: true
-    command : >
-      bash -c "apt update && apt upgrade -y 
-      &&  DEBIAN_FRONTEND=noninteractive 
-      &&  mkdir /run/sshd 
-      &&  apt install -y apt --no-install-recommends python3 openssh-server sudo 
-      &&  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-      &&  sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
-      &&  echo 'root:toor' | chpasswd 
-      && /usr/sbin/sshd -D"
+    environment:
+      ROOT_PASSWORD: toor
+    command : "/usr/sbin/sshd -D"
     expose: 
       - 22
     ports:
