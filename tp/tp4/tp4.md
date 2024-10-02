@@ -26,15 +26,15 @@ ansible-galaxy install vanessakovalsky.mysql
 - Tester en relançant le playbook pour vérifier si cela fonctionne toujours
 
 ## Ajouter des tags à nos taches
-- Ajouter sur nos différentes taches et play les tags suivants :
--- install
--- config
--- service
--- deploiement
--- db
--- web
-- Lancer le playbook uniquement pour ce qui concerne l'installation
-- Puis lancer le en omettant les taches d'installation
+* Ajouter sur nos différentes taches et play les tags suivants :
+  * install
+  * config
+  * service
+  * deploiement
+  * db
+  * web
+* Lancer le playbook uniquement pour ce qui concerne l'installation
+* Puis lancer le en omettant les taches d'installation
 
 ## Création et publication d'un rôle
 - Initialiser un role appeler webserver-blog
