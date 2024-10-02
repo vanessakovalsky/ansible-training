@@ -64,7 +64,12 @@ mysql_users:
   * db
   * web
 * Lancer le playbook uniquement pour ce qui concerne l'installation
-* Puis lancer le en omettant les taches d'installation
+
+```
+ansible-playbook playbook.yml --tags=install
+```
+
+* Puis lancer le en omettant les taches d'installation 
 
 ## Création et publication d'un rôle
 - Initialiser un role appeler webserver-blog
