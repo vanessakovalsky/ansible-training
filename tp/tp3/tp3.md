@@ -58,7 +58,7 @@ inventory       = ./hosts
 - Il est temps d'alimenter notre playbook :) 
 - Cibler le bon hote l'hote webserver :
 ```
-host: webserver
+hosts: webserver
 ```
 - Ensuite on déclare une tache pour installer les paquets nécessaires :
 ```
