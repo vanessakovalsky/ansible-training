@@ -42,9 +42,10 @@ ansible-galaxy install vanessakovalsky.mysql
 ansible-galaxy init webserver-blog 
 ```
 - Déplacer les différents éléments dans les fichiers correspondant du template généré
-- Importer dans le playbook original le rôle crée et supprimer les tâches liées au serveur web
+- Pousser le code sur un nouveau dépôt Github 
 - Connectez vous sur galaxy.ansible.com (avec un compte github à créer si vous n'en avez pas)
-- Publier votre role
+- Publier votre role : dans le menu rôle cliquer sur rôle et vous avez un bouton Import : remplissez le formulaire pour importer avec l'adresse du dépôt Git. 
+- Importer dans le playbook original le rôle crée et supprimer les tâches liées au serveur web
 - Récupérer le rôle créé par un autre stagiaire
 - Inclure ce rôle à la place du votre et lancer le playbook
 
