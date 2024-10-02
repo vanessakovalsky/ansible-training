@@ -207,7 +207,6 @@ name: Create MySQL client config
       path: /etc/mysql/mysql.conf.d/mysqld.cnf
       regexp: '^bind-address'
       line: "# bind-address"
-    notify: Restart mysql
 ```
 - Charger la table sql (remplacer les variables par les bonnes valeurs en dur dans le fichier table.sql)
 ```
